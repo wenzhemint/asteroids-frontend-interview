@@ -1,5 +1,5 @@
-import { createWebHistory, createRouter } from "vue-router";
-import HomePage from "./components/HomePage/HomePage.vue";
+import { createWebHistory, createRouter } from "vue-router"
+import HomePage from "./components/HomePage/HomePage.vue"
 
 const routes = [
     {
@@ -7,11 +7,11 @@ const routes = [
         name: "Home",
         component: HomePage
     }
-];
+]
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
-});
+})
 
-export default router;
+export default router

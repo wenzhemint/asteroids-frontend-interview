@@ -3,14 +3,13 @@
 </template>
 
 <script>
-import { state } from "@/socket";
+import { state } from "@/socket"
 
 export default {
     name: "ConnectionState",
-
     computed: {
         connected() {
-        return state.connected;
+            return state.connected
         }
     }
 }
