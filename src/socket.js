@@ -1,5 +1,6 @@
 import { reactive } from "vue"
 import { io } from "socket.io-client"
+import store from './store'
 
 export const state = reactive({
   connected: false,
@@ -22,7 +23,10 @@ socket.on("disconnect", () => {
   console.log("disconnect")
 })
 
-socket.on("tick", (...args) => {
+socket.on("tick", (args) => {
   state.tickEvents.push(args)
-  console.log("tick event from socket: ", args)
+  
+  console.log("tick event from socket: ", args.miners)
+
+  // store.state.adteroid.miners = state.tickEvents
 })

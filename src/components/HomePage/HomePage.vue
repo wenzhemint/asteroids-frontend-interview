@@ -59,6 +59,8 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="section-hr"></div>
             </div>
 
             <StatusList :tab="currentTab" />
@@ -86,7 +88,7 @@ import { mapState, mapMutations } from 'vuex'
 import { socket } from "@/socket"
 import StatusList from '../StatusList/StatusList.vue'
 import StatusFrame from '../StatusFrame/StatusFrame.vue'
-import AsteroidService from '../../services/asteroid.service';
+import AsteroidService from '../../services/asteroid.service'
 
 export default {
     name: "HomePage",
@@ -197,6 +199,18 @@ export default {
         // Status list menu buttons
         .status-list-menu {
             display: flex;
+            position: relative;
+            padding-bottom: 24px;
+
+            .section-hr {
+                position: absolute;
+                left: -200px;
+                bottom: 0;
+                z-index: 10;
+                width: 1000px;
+                height: 1px;
+                background-color: #33344B;
+            }
             
             .tabIsActive {
                 border-radius: 8px;
