@@ -198,7 +198,7 @@
                         <div class="form-group button-box mt-4">
                             <button type="submit" class="submit-button btn btn-light btn-block" :disabled="createMinerLoading">
                                 <span v-if="createMinerLoading">
-                                    Loading...
+                                    Saving...
                                 </span>
                                 <span v-else>
                                     Save

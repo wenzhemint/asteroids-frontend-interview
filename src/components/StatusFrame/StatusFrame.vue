@@ -16,7 +16,7 @@ export default {
 <style scoped lang="scss">
 .frame-container {
     position: relative;
-    z-index: 20;
+    // z-index: 20;
     width: 800px;
     height: 801px;
     background-image: url("../../assets/images/StatusFrameBg.png");

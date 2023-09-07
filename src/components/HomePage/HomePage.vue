@@ -208,10 +208,10 @@ export default {
 
             .section-hr {
                 position: absolute;
-                left: -200px;
+                left: 0;
                 bottom: 0;
-                z-index: 10;
-                width: 1000px;
+                // z-index: 10;
+                width: 100%;
                 height: 1px;
                 background-color: #33344B;
             }
