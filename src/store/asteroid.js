@@ -1,15 +1,33 @@
 const state = () => ({
-    testState: JSON.parse(localStorage.getItem('testState')) || ''
+    miners: JSON.parse(localStorage.getItem('miners')) || [],
+    asteroids: JSON.parse(localStorage.getItem('asteroids')) || [],
+    planets: JSON.parse(localStorage.getItem('planets')) || []
 })
 
 const mutations = {
-    updateTestState(state, testState) {
-        state.testState = testState
-        localStorage.setItem('testState', JSON.stringify(state.testState))
+    updateMiners(state, miners) {
+        state.miners = miners
+        localStorage.setItem('miners', JSON.stringify(state.miners))
     },
-    clearTestState(state) {
-        state.testState = null
-        localStorage.removeItem('testState')
+    clearMiners(state) {
+        state.miners = null
+        localStorage.removeItem('miners')
+    },
+    updateAsteroids(state, asteroids) {
+        state.asteroids = asteroids
+        localStorage.setItem('asteroids', JSON.stringify(state.asteroids))
+    },
+    clearAsteroids(state) {
+        state.asteroids = null
+        localStorage.removeItem('asteroids')
+    },
+    updatePlanets(state, planets) {
+        state.planets = planets
+        localStorage.setItem('planets', JSON.stringify(state.planets))
+    },
+    clearPlanets(state) {
+        state.planets = null
+        localStorage.removeItem('planets')
     }
 }
 

@@ -14,12 +14,15 @@ export default {
         },
         ...mapState({
             testState: state => state.asteroid.testState
-        }),
-        methods: {
-            ...mapMutations('asteroid', ['updateTestState']),
-            updateCurrentTab(index) {
-                this.currentTab = index
-            }
+        })
+    },
+    mounted() {
+        this.updateTestState('testStateValue')
+    },
+    methods: {
+        ...mapMutations('asteroid', ['updateTestState']),
+        updateCurrentTab(index) {
+            this.currentTab = index
         }
     }
 }

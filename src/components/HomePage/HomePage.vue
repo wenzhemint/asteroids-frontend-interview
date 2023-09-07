@@ -66,7 +66,7 @@
 
         <!-- The astreroids-mining status frame section -->
         <!-- only show Status Frame component when the screen with is wide enough.  -->
-        <div v-if="screenWidth>1440" class="status-frame">
+        <div v-if="showFrame" class="status-frame">
             <!-- Frame header -->
             <div class="frame-header">
                 {{ currentYear }} years
@@ -79,9 +79,14 @@
 </template>
 
 <script>
+import {
+    DEFAULT_WIDTH
+} from '../../helpers/constants'
+import { mapState, mapMutations } from 'vuex'
 import { socket } from "@/socket"
 import StatusList from '../StatusList/StatusList.vue'
 import StatusFrame from '../StatusFrame/StatusFrame.vue'
+import AsteroidService from '../../services/asteroid.service';
 
 export default {
     name: "HomePage",
@@ -91,22 +96,32 @@ export default {
     },
     data() {
         return {
-            screenWidth: document.documentElement.clientWidth,
             currentTab: 0,
-            currentYear: 0
+            currentYear: 0,
+            showFrame: false
         }
     },
+    computed: {
+        ...mapState({
+            miners: state => state.asteroid.miners
+        })
+    },
     mounted() {
-        console.log('base url from env: ', process.env.VUE_APP_BASE_URL)
-        console.log("screen width: ", this.screenWidth)
+        // console.log('base url from env: ', process.env.VUE_APP_BASE_URL)
+
+        // Check window width after loading. 
+        this.getDimensions()
+
+        // Get miners, asteroids, planets data
+        this.getMiners()
+        this.getAsteroids()
+        this.getPlanets()
         
         // Connect to Sockeet after Home page has loaded. 
-        socket.connect();
+        socket.connect()
 
         // count year
         this.timer = setInterval(this.countYear, 1000)
-
-        this.updateTestState('testStateValue')
 
         // Check if screen is resizing
         window.addEventListener('resize', this.getDimensions)
@@ -118,14 +133,53 @@ export default {
         clearInterval(this.timer)
     },
     methods: {
+        ...mapMutations('asteroid', ['updateMiners', 'updateAsteroids', 'updatePlanets']),
         getDimensions() {
-            this.screenWidth = document.documentElement.clientWidth
+            let screenWidth = document.documentElement.clientWidth
+
+            this.showFrame = screenWidth>DEFAULT_WIDTH?true:false
         },
         countYear() {
             this.currentYear++
         },
         updateCurrentTab(index) {
             this.currentTab = index
+        },
+        getMiners() {
+            AsteroidService.getAllMiners().then(
+                (response) => {
+                    console.log("miners res: ", response)
+
+                    this.updateMiners(response)
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+        },
+        getAsteroids() {
+            AsteroidService.getAllAsteroids().then(
+                (response) => {
+                    console.log("asteroids res: ", response)
+
+                    this.updateAsteroids(response)
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+        },
+        getPlanets() {
+            AsteroidService.getAllPlanets().then(
+                (response) => {
+                    console.log("palnets res: ", response)
+
+                    this.updatePlanets(response)
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
         }
     }
 }
