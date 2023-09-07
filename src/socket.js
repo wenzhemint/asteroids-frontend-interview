@@ -4,8 +4,8 @@ import store from './store'
 
 export const state = reactive({
   connected: false,
-  fooEvents: [],
-  tickEvents: []
+  tickEvents: [],
+  currentTick: 0
 })
 
 // "undefined" means the URL will be computed from the `window.location` object
@@ -23,10 +23,50 @@ socket.on("disconnect", () => {
   console.log("disconnect")
 })
 
+// Listen to "tick" channel
 socket.on("tick", (args) => {
   state.tickEvents.push(args)
   
-  console.log("tick event from socket: ", args.miners)
+  console.log("current state data: ", store.state.asteroid)
+  console.log("tick event from socket: ", args)
 
-  // store.state.adteroid.miners = state.tickEvents
+  let minersArr = []
+  let asteroidsArr = []
+  let palnetArr = []
+  minersArr = args.miners
+  asteroidsArr = args.asteroids
+  palnetArr = args.planets
+
+  // Sync static data by the the data received from socket channel
+  if(checkIfStatesValid() && checkArrayIsValid(minersArr) && checkArrayIsValid(asteroidsArr) && checkArrayIsValid(palnetArr)) {
+    // Sync Miners data
+    store.state.asteroid.miners = minersArr
+    localStorage.setItem('miners', JSON.stringify(minersArr))
+
+    // Sync Adteroids data
+    store.state.asteroid.asteroids = asteroidsArr
+    localStorage.setItem('asteroids', JSON.stringify(asteroidsArr))
+
+    // Sync Planet data
+    store.state.asteroid.planets = palnetArr
+    localStorage.setItem('planets', JSON.stringify(palnetArr))
+  }
+
+  state.currentTick = args.currentTick
 })
+
+function checkIfStatesValid() {
+  if(store.state && store.state.asteroid && store.state.asteroid.miners && store.state.asteroid.asteroids && store.state.asteroid.planets) {
+    return true
+  }
+
+  return false
+}
+
+function checkArrayIsValid(arr) {
+  if(arr && arr.length>0) {
+    return true
+  }
+
+  return false
+}

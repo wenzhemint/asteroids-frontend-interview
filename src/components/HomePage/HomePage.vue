@@ -71,7 +71,7 @@
         <div v-if="showFrame" class="status-frame">
             <!-- Frame header -->
             <div class="frame-header">
-                {{ currentYear }} years
+                {{ currentTick }} years
             </div>
 
             <!-- Frame component -->
@@ -85,7 +85,7 @@ import {
     DEFAULT_WIDTH
 } from '../../helpers/constants'
 import { mapState, mapMutations } from 'vuex'
-import { socket } from "@/socket"
+import { socket, state } from "@/socket"
 import StatusList from '../StatusList/StatusList.vue'
 import StatusFrame from '../StatusFrame/StatusFrame.vue'
 import AsteroidService from '../../services/asteroid.service'
@@ -99,14 +99,18 @@ export default {
     data() {
         return {
             currentTab: 0,
-            currentYear: 0,
+            // currentYear: 0,
             showFrame: false
         }
     },
     computed: {
         ...mapState({
-            miners: state => state.asteroid.miners
-        })
+            miners: state => state.asteroid.miners,
+            ticks: state => state.asteroid.ticks
+        }),
+        currentTick() {
+            return state.currentTick
+        }
     },
     mounted() {
         // console.log('base url from env: ', process.env.VUE_APP_BASE_URL)
@@ -122,8 +126,8 @@ export default {
         // Connect to Sockeet after Home page has loaded. 
         socket.connect()
 
-        // count year
-        this.timer = setInterval(this.countYear, 1000)
+        // // count year
+        // this.timer = setInterval(this.countYear, 1000)
 
         // Check if screen is resizing
         window.addEventListener('resize', this.getDimensions)
@@ -131,8 +135,8 @@ export default {
     unmounted() {
         // remove event listener
         window.removeEventListener('resize', this.getDimensions)
-        // clear timmer
-        clearInterval(this.timer)
+        // // clear timmer
+        // clearInterval(this.timer)
     },
     methods: {
         ...mapMutations('asteroid', ['updateMiners', 'updateAsteroids', 'updatePlanets']),
@@ -141,9 +145,9 @@ export default {
 
             this.showFrame = screenWidth>DEFAULT_WIDTH?true:false
         },
-        countYear() {
-            this.currentYear++
-        },
+        // countYear() {
+        //     this.currentYear++
+        // },
         updateCurrentTab(index) {
             this.currentTab = index
         },

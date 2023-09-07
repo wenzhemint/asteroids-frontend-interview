@@ -40,7 +40,7 @@
                 <tr v-for="(asteroid, index) in asteroids" :key="index">
                     <th scope="row">{{ asteroid.name }}</th>
                     <td :class="{ 'td-red': asteroid.minerals<=0 }">{{ asteroid.minerals }}</td>
-                    <td>{{ asteroid.currentMiner?checkStrLengh(asteroid.currentMiner):'none' }}</td>
+                    <td>{{ asteroid.currentMiner?checkStrLengh(asteroid.currentMiner.name):'none' }}</td>
                     <td>{{ parseInt(asteroid.position.x) }},{{ parseInt(asteroid.position.y) }}</td>
                 </tr>
             </tbody>
@@ -278,7 +278,8 @@ export default {
         }),
         checkStrLengh(){
             return (v)=>{
-                let res = v.toString().length>10?v.substring(0,7)+"...":v
+                let res = v.toString()
+                res = v.length>10?v.substring(0,7)+"...":res
                 return res
             }
         }
