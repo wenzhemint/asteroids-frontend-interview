@@ -1,6 +1,7 @@
 import { reactive } from "vue"
 import { io } from "socket.io-client"
 import store from './store'
+import { SOCKET_URL } from './helpers/constants'
 
 export const state = reactive({
   connected: false,
@@ -8,10 +9,8 @@ export const state = reactive({
   currentTick: 0
 })
 
-// "undefined" means the URL will be computed from the `window.location` object
-const URL = "https://asteroids.dev.mediasia.cn"
-
-export const socket = io(URL)
+// Connect socket server
+export const socket = io(SOCKET_URL)
 
 socket.on("connect", () => {
   state.connected = true

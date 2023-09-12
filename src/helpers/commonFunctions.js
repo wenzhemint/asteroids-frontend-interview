@@ -1,4 +1,4 @@
-// toFixed 方法，默认两位小数点 
+// generate random position spot by the delivered range
 const getRandomPosition = (range) => {
 	return Math.floor(Math.random() * range)
 }

@@ -10,18 +10,18 @@
                     <th class="th" scope="col">travelSpeed</th>
                     <th class="th" scope="col">miningSpeed</th>
                     <th class="th" scope="col">Position</th>
-                    <th class="th" scope="col">Status</th>
+                    <th class="th" scope="col" width="80">Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(miner, index) in miners" :key="index">
                     <th scope="row">{{ miner.name }}</th>
-                    <td>{{ checkStrLengh(miner.planet) }}</td>
+                    <td>{{ miner.planet.name }}</td>
                     <td :class="{ 'td-green': miner.carryCapacity>=200 }">{{ miner.carryCapacity }}/200</td>
                     <td>{{ miner.travelSpeed }}</td>
                     <td>{{ miner.miningSpeed }}</td>
                     <td>{{ parseInt(miner.x) }},{{ parseInt(miner.y) }}</td>
-                    <td>{{ miner.status }}</td>
+                    <td>{{ getMinerStatus(miner.status) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -40,7 +40,7 @@
                 <tr v-for="(asteroid, index) in asteroids" :key="index">
                     <th scope="row">{{ asteroid.name }}</th>
                     <td :class="{ 'td-red': asteroid.minerals<=0 }">{{ asteroid.minerals }}</td>
-                    <td>{{ asteroid.currentMiner?checkStrLengh(asteroid.currentMiner.name):'none' }}</td>
+                    <td>{{ asteroid.currentMiner?checkStrLengh(asteroid.currentMiner.name):'None' }}</td>
                     <td>{{ parseInt(asteroid.position.x) }},{{ parseInt(asteroid.position.y) }}</td>
                 </tr>
             </tbody>
@@ -61,7 +61,7 @@
                     <th scope="row" @click="minerListInPlanet(planet._id)" data-toggle="modal" data-target="#getMinersModal">{{ planet.name }}</th>
                     <td @click="minerListInPlanet(planet._id)" data-toggle="modal" data-target="#getMinersModal">{{ planet.miners }}</td>
                     <td :class="{ 'td-green': planet.minerals>=1000 }" @click="minerListInPlanet(planet._id)" data-toggle="modal" data-target="#getMinersModal">{{ planet.minerals }}/1000</td>
-                    <td v-if="planet.minerals>=1000" class="td-create" data-toggle="modal" data-target="#createMinerModal">
+                    <td v-if="planet.minerals>=1000" class="td-create" data-toggle="modal" data-target="#createMinerModal" @click="createMinerAction()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                             <g clip-path="url(#clip0_6_9006)">
                             <path d="M4.49996 5.99997H5.99996H4.49996ZM7.49996 5.99997H5.99996H7.49996ZM5.99996 5.99997V4.49997V5.99997ZM5.99996 5.99997V7.49997V5.99997ZM5.84996 0.586575C5.94276 0.53299 6.05716 0.53299 6.14996 0.58658L10.6131 3.16337C10.7059 3.21696 10.7631 3.316 10.7631 3.42318V8.57678C10.7631 8.68393 10.7059 8.78298 10.6131 8.83658L6.14996 11.4134C6.05716 11.467 5.94276 11.467 5.84996 11.4134L1.38682 8.83658C1.294 8.78298 1.23682 8.68393 1.23682 8.57678V3.42318C1.23682 3.316 1.294 3.21696 1.38682 3.16337L5.84996 0.586575Z" fill="#00F0FF" stroke="#00F0FF" stroke-linecap="round" stroke-linejoin="round"/>
@@ -164,7 +164,7 @@
                                 <label for="planet">Planet</label>
                                 <Field name="planet" as="select" class="form-control">
                                     <option value="">Select Planet</option>
-                                    <option v-for="(p, i) in planets" :key="i" :value="p._id">{{ p._id }}</option>
+                                    <option v-for="(p, i) in planets" :key="i" :value="p._id">{{ p.name }}</option>
                                 </Field>
                                 <ErrorMessage name="planet" class="error-feedback" />
                             </div>
@@ -224,6 +224,9 @@ import AsteroidService from '../../services/asteroid.service'
 import { Form, Field, ErrorMessage } from "vee-validate"
 import * as yup from "yup"
 import commonFunctions from '../../helpers/commonFunctions'
+import {
+    MINER_STATUS
+} from '../../helpers/constants'
 
 export default {
     name: "StatusList",
@@ -279,13 +282,24 @@ export default {
         checkStrLengh(){
             return (v)=>{
                 let res = v.toString()
-                res = v.length>10?v.substring(0,7)+"...":res
+                res = res.length>10?res.substring(0,10)+"..":res
+                return res
+            }
+        },
+        getMinerStatus() {
+            return (v)=>{
+                let sIndex = parseInt(v)
+
+                let res = MINER_STATUS[sIndex]
+                res = res.length>12?res.substring(0,12)+"..":res
                 return res
             }
         }
     },
     mounted() {
         console.log("status list loaded. ")
+
+        console.log("here", MINER_STATUS[0])
     },
     methods: {
         createNewMiner(planetId) {
@@ -331,6 +345,11 @@ export default {
                     this.createMinerError = error
                 }
             )
+        },
+        createMinerAction() {
+            this.createMinerLoading = false
+            this.createMinerError = ""
+            this.createMinerSucceed = false
         }
     }
 }

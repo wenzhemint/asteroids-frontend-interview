@@ -82,7 +82,8 @@
 
 <script>
 import {
-    DEFAULT_WIDTH
+    DEFAULT_WIDTH,
+    MINER_STATUS
 } from '../../helpers/constants'
 import { mapState, mapMutations } from 'vuex'
 import { socket, state } from "@/socket"
