@@ -391,7 +391,7 @@ table .th {
         
         .modal-content {
             padding-bottom: 10px;
-            background-color: #1A1B2F;
+            background-color: #191A29;
 
             .modal-header {
                 position: relative;
@@ -450,7 +450,7 @@ table .th {
 
                     .submit-button {
                         width: 91px;
-                        color: #1A1B2F;
+                        color: #191A29;
                         font-family: Lato;
                         font-size: 12px;
                         font-style: normal;
